@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SKKY | About Us</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/aboutus.css' %}">
+</head>
+
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="{% static 'img/site_logo.png' %}" alt="SKKY Logo" class="site-logo">
+        </div>
+    </header>
+
+    <div class="about-section">
+        <h1>About Us</h1>
+
+        <!-- 슬라이더 추가 -->
+        <div class="slider-container">
+            <div class="slides">
+                <img src="{% static 'img/기계1.jpg' %}" alt="Image 1" class="slide">
+                <img src="{% static 'img/기계2.jpg' %}" alt="Image 2" class="slide">
+                <img src="{% static 'img/기계3.jpg' %}" alt="Image 3" class="slide">
+            </div>
+            <button class="prev" onclick="moveSlide(-1)">&#10094;</button>
+            <button class="next" onclick="moveSlide(1)">&#10095;</button>
+        </div>
+
+        <div class="description">
+            <h2>회사 소개</h2>
+            <p>안녕하세요! SKKY에 오신 것을 환영합니다. 우리는 지속 가능한 에너지 솔루션을 통해 여러분의 생활을 더욱 편리하고 풍요롭게 만들기 위해 노력하는 기업입니다.</p>
+            <p>우리의 목표는 고품질의 서비스와 혁신적인 기술을 제공하여 고객의 만족을 극대화하는 것입니다. 우리는 고객의 목소리를 귀담아 듣고, 그에 맞는 솔루션을 제공함으로써 신뢰받는 파트너가 되고자
+                합니다.</p>
+        </div>
+
+        <div class="machine-introduction">
+            <h2>최첨단 기계 소개</h2>
+            <p>우리의 기계는 첨단 기술을 활용하여 효율적이고 안정적인 에너지 생산을 지원합니다. 자동화된 시스템과 정밀한 센서를 통해 최적의 성능을 발휘하며, 에너지 생산량을 극대화할 수 있도록
+                설계되었습니다.</p>
+            <p>또한, 환경 친화적인 설계로 에너지 절약과 탄소 배출 감소에 기여하고 있습니다. SKKY의 기계와 함께 더 나은 미래를 만들어가세요!</p>
+        </div>
+    </div>
+
+    <div class="chatbot-icon">
+        <a href="#" onclick="openChatbot();">
+            <img src="{% static 'img/chat.png' %}" alt="챗봇 아이콘" class="chatbot-img">
+        </a>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <a href="{% url 'aboutus' %}" class="about_us">ABOUT US</a>
+            <a href="{% url 'main' %}"><img src="{% static 'img/home.png' %}" alt="집 그림"></a>
+            <a href="{% url '마이페이지' %}"><img src="{% static 'img/mypage.png' %}" alt="사람 그림"></a>
+        </div>
+    </footer>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        function moveSlide(step) {
+            currentSlide += step;
+
+            if (currentSlide >= totalSlides) {
+                currentSlide = 0;
+            }
+
+            if (currentSlide < 0) {
+                currentSlide = totalSlides - 1;
+            }
+
+            const offset = -currentSlide * 100;
+            document.querySelector('.slides').style.transform = `translateX(${offset}%)`;
+        }
+
+        setInterval(() => {
+            moveSlide(1);
+        }, 3000);
+
+        function openChatbot() {
+            alert('챗봇이 열립니다!'); // 실제로는 챗봇 열기 코드로 대체
+        }
+    </script>
+</body>
+
+</html>

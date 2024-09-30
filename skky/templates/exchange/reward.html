@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SKKY | 교환 신청 페이지</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/reward.css' %}">
+</head>
+
+<body>
+    <h1>교환 신청서</h1>
+    <form action="{% url '교환신청제출' %}" method="post">
+        {% csrf_token %}
+        <p>신청자 : <input type="hidden" value="{{user.id}}" name="user_id">{{user}}</p>
+        <p>신청 상품 : <input type="hidden" value="{{product.id}}" name="product_id">{{product.product_name}}</p>
+        <p>신청 수량 : <input type="hidden" value="{{quantity}}" name="product_cnt">{{quantity}}개</p>
+
+        <input type="radio" value="0" name="change_type" checked>현장수령
+        <input type="radio" value="1" name="change_type">배송 <br>
+
+        <input type="text" id="address" name="address" placeholder="주소">
+        <button type="button" onclick="openDaumPostcode()">주소 찾기</button><br>
+
+        <!-- 현재 날짜와 시간을 보여주는 input 필드 -->
+        <input type="hidden" id="datetime" name="datetime" readonly><br>
+
+        <button type="submit">신청 제출</button>
+    </form>
+
+    <div class="chatbot-icon">
+        <a href="#" onclick="openChatbot();">
+            <img src="{% static 'img/chat.png' %}" alt="챗봇 아이콘">
+        </a>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <a href="{% url 'aboutus' %}" class="about_us">ABOUT US</a>
+            <a href="{% url 'main' %}"><img src="{% static 'img/home.png' %}" alt="집 그림"></a>
+            <a href="{% url '마이페이지' %}"><img src="{% static 'img/mypage.png' %}" alt="사람 그림"></a>
+        </div>
+    </footer>
+
+    <!-- 다음 주소 검색 API 추가 -->
+    <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script>
+        function openDaumPostcode() {
+            new daum.Postcode({
+                oncomplete: function (data) {
+                    document.getElementById('address').value = data.address;
+                }
+            }).open();
+        }
+
+        // 현재 날짜와 시간을 yyyy-MM-dd HH:mm:ss 형식으로 input 필드에 넣는 함수
+        function setCurrentDateTime() {
+            var now = new Date();
+            var year = now.getFullYear();
+            var month = ('0' + (now.getMonth() + 1)).slice(-2);
+            var day = ('0' + now.getDate()).slice(-2);
+            var hours = ('0' + now.getHours()).slice(-2);
+            var minutes = ('0' + now.getMinutes()).slice(-2);
+            var seconds = ('0' + now.getSeconds()).slice(-2);
+
+            var formattedDateTime = year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds;
+
+            document.getElementById('datetime').value = formattedDateTime;
+        }
+
+        // 페이지가 로드될 때 현재 날짜와 시간을 설정
+        window.onload = setCurrentDateTime;
+    </script>
+</body>
+
+</html>

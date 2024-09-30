@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SKKY | 메인페이지</title>
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+</head>
+
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="{% static 'img/site_logo.png' %}" alt="SKKY Logo" class="site-logo">
+        </div>
+    </header>
+    {% if request.user.is_authenticated %}
+    {% if request.user.user_grade == 0 %}
+    <!-- 관리자 ver -->
+    <div class="admin-container">
+        <h2 class="admin-h2">관리자 페이지</h2>
+        <div class="admin-options">
+            <div>
+                <p>{{ request.user.username }}</p>
+                <a href="{% url 'logout' %}" class="logout">로그아웃</a>
+                <div>
+                    <p>관리자 페이지에서 할 수 있는 것 설명 들어갈 예정</p>
+                </div>
+                <div class="admin-a-tag">
+                    <a href="{% url '기계정보' %}"><button class="machine-manage">기계관리</button></a>
+                    <a href="{% url '회원정보' %}"><button class="user-manage">회원관리</button></a>
+                    <a href="{% url '상품정보' %}"><button class="goods-manage">상품관리</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <!-- 사용자 ver -->
+    <div class="user-container">
+        <h2>환영합니다, {{ request.user.username }}님!</h2><br>
+        <div class="main-content">
+            <div class="basic-content">
+                <a href="{% url 'logout' %}" class="logout">로그아웃</a>
+                <a href="#"><img src="{% static 'img/pet.png' %}" alt="페트병 기계 위치" class="machine-img"></a>
+            </div>
+            <br>
+            <br>
+            <br>
+            <!-- 슬라이더 추가 -->
+            <div class="slider-container">
+                <div class="slides">
+                    <img src="{% static 'img/11.png' %}" alt="Image 1" class="slide">
+                    <img src="{% static 'img/4.png' %}" alt="Image 2" class="slide">
+                    <img src="{% static 'img/6.png' %}" alt="Image 3" class="slide">
+                    <img src="{% static 'img/8.png' %}" alt="Image 4" class="slide">
+                    <img src="{% static 'img/9.png' %}" alt="Image 5" class="slide">
+                </div>
+                <button class="prev" onclick="moveSlide(-1)">&#10094;</button>
+                <button class="next" onclick="moveSlide(1)">&#10095;</button>
+            </div>
+            <a href="{% url '교환신청' %}">
+                <button class="exchange-btn">교환 신청</button>
+            </a>
+        </div>
+    </div>
+
+    <div class="chatbot-icon">
+        <a href="#" onclick="openChatbot();">
+            <img src="{% static 'img/chat.png' %}" alt="챗봇 아이콘" class="chatbot-img">
+        </a>
+    </div>
+    {% endif %}
+    {% else %}
+    <!-- 로그인하지 않은 사용자 -->
+    <div class="login-container">
+        <h2 class="before_h2">SKKY에 오신 것을 환영합니다!</h2>
+        <div class="join_site">
+            <a href="{% url 'signup' %}" class="signup-btn">회원가입</a>
+            <a href="{% url 'login' %}" class="login-btn">로그인</a>
+        </div>
+        <br><br>
+        <p class="before-p"><strong>페트병 기계 위치를 찾고 교환을 신청하세요.</strong></p>
+    </div>
+    {% endif %}
+
+    <footer>
+        <div class="footer-content">
+            <a href="{% url 'aboutus' %}" class="about_us">ABOUT US</a>
+            <a href="{% url 'main' %}"><img src="{% static 'img/home.png' %}" alt="집 그림"></a>
+            <a href="{% url '마이페이지' %}"><img src="{% static 'img/mypage.png' %}" alt="사람 그림"></a>
+        </div>
+    </footer>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        function moveSlide(step) {
+            currentSlide += step;
+
+            if (currentSlide >= totalSlides) {
+                currentSlide = 0;
+            }
+
+            if (currentSlide < 0) {
+                currentSlide = totalSlides - 1;
+            }
+
+            const offset = -currentSlide * 100;
+            document.querySelector('.slides').style.transform = `translateX(${offset}%)`;
+        }
+
+        setInterval(() => {
+            moveSlide(1);
+        }, 3000);
+
+        function openChatbot() {
+            // 챗봇 열기 로직 추가
+            alert('챗봇이 열립니다!'); // 실제로는 챗봇 열기 코드로 대체
+        }
+    </script>
+
+</body>
+
+</html>

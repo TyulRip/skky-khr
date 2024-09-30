@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SKKY | 회원상세정보</title>
+</head>
+
+<body>
+    <div>
+        <h2>{{ user.user_name }} 님의 교환 내역</h2>
+
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>상품명</th>
+                    <th>교환 수량</th>
+                    <th>교환 신청일</th>
+                    <th>교환 완료일</th>
+                    <th>배송 완료</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for exchange in exchange_list %}
+                <tr>
+                    <td>{{ exchange.product.product_name }}</td>
+                    <td>{{ exchange.change_cnt }}</td>
+                    <td>{{ exchange.change_app_dt }}</td>
+                    <td>{% if exchange.change_dt %}{{ exchange.change_dt }}{% else %}미완료{% endif %}</td>
+                    <td><a href="{% url '배송완료' exchange.id %}">
+                            <button>배송완료</button>
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5">교환 내역이 없습니다.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const footerHeight = document.querySelector('footer').offsetHeight;
+            document.body.style.paddingBottom = `${footerHeight}px`;
+        });
+    </script>
+</body>
+
+</html>

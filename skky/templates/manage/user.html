@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SKKY | 회원 목록</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/user.css' %}">
+</head>
+
+<body>
+    <h1 class="cross">회원 목록</h1>
+    <a href="{% url 'main' %}" class="cross">메인</a>
+    <a href="{% url '교환신청내역' %}" class="cross">교환신청내역</a>
+    <table>
+        <tr>
+            <th>가입 일자</th>
+            <th>아이디</th>
+            <th>이름</th>
+            <th>연락처</th>
+            <th>현재 포인트</th>
+            <th>누적 포인트</th>
+            <th>페트병 투입</th>
+            <th>회원 등급</th>
+            <th>상태</th>
+            <th></th>
+        </tr>
+        {% for user in users %}
+        <tr>
+            <td>{{ user.user_sign }}</td>
+            <td><a href="{% url '회원상세정보' user.id %}">{{ user.username }}</a></td>
+            <td>{{ user.user_name }}</td>
+            <td>{{ user.user_phone }}</td>
+            <td>{{ user.user_point }}</td>
+            <td>{{ user.user_acc_point }}</td>
+            <td>{{ user.user_pet }}</td>
+            <td>
+                {% if user.user_grade == 1 %}
+                고마운분
+                {% elif user.user_grade == 2 %}
+                귀한분
+                {% elif user.user_grade == 3 %}
+                천생연분
+                {% endif %}
+            </td>
+            <td>
+                {% if user.user_del == 0 %}
+                회원
+                {% else %}
+                탈퇴
+                {% endif %}
+            </td>
+            <td>
+                <a href="{% url '탈퇴' user.id %}">
+                    <button>탈퇴</button>
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+
+</html>

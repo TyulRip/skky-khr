@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SKKY | 마이페이지</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/mypage.css' %}">
+</head>
+
+<body>
+
+    <header>
+        <div class="logo-container">
+            <img src="{% static 'img/site_logo.png' %}" alt="SKKY Logo" class="site-logo">
+        </div>
+    </header>
+        <a href="{% url 'logout' %}" class="logout-a">로그아웃</a>
+
+    <section class="mypage-section">
+        <h2>마이페이지</h2>
+        <div class="user-info">
+            <h3>내 정보</h3>
+            <p><strong>아이디:</strong> {{ request.user.username }}</p>
+            <p><strong>이름:</strong> {{ request.user.user_name }}</p>
+            <p><strong>전화번호:</strong><br>
+                <span id="phone-display">{{ request.user.user_phone }}</span>
+                <input type="text" name="input_user_phone" id="phone-edit" value="{{ request.user.user_phone }}"
+                    required class="phone-edit" style="display: none;">
+            </p>
+            <!-- Form should always be present -->
+            <form id="phone-form" action="{% url '정보수정' %}" method="POST" style="margin-top: 15px;">
+                {% csrf_token %}
+                <div>
+                    <input type="text" name="input_user_phone" id="user_phone" value="{{ request.user.user_phone }}"
+                        required>
+                    <button type="submit" class="phone-btn">저장</button>
+                </div>
+            </form>
+            <p><strong>등급:</strong>
+                {% if request.user.user_grade == 1 %} 고마운분
+                {% elif request.user.user_grade == 2 %} 귀한분
+                {% elif request.user.user_grade == 3 %} 천생연분
+                {% endif %}
+            </p>
+        </div>
+
+        <div>
+            <button type="button" id="edit-button" class="edit-button" onclick="toggleEdit()">정보수정</button>
+        </div>
+
+
+    </section>
+    <div class="chatbot-icon">
+        <a href="#" onclick="openChatbot();">
+            <img src="{% static 'img/chat.png' %}" alt="챗봇 아이콘">
+        </a>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <a href="{% url 'aboutus' %}" class="about_us">ABOUT US</a>
+            <a href="{% url 'main' %}"><img src="{% static 'img/home.png' %}" alt="집 그림"></a>
+            <a href="{% url '마이페이지' %}"><img src="{% static 'img/mypage.png' %}" alt="사람 그림"></a>
+        </div>
+    </footer>
+
+    <script>
+        function toggleEdit() {
+            var displaySection = document.getElementById("phone-display");
+            var editSection = document.getElementById("user_phone");
+            var editButton = document.getElementById("edit-button");
+            var formButton = document.querySelector("#phone-form button[type='submit']");
+
+            if (displaySection.style.display === "none") {
+                displaySection.style.display = "block"; // Show the display section
+                editSection.style.display = "none"; // Hide the edit input
+                formButton.style.display = "none"; // Hide the save button
+                editButton.innerText = "정보수정"; // Reset button text
+            } else {
+                displaySection.style.display = "none"; // Hide the display section
+                editSection.style.display = "block"; // Show the edit input
+                formButton.style.display = "inline"; // Show the save button
+                editButton.innerText = "취소"; // Change button text to "Cancel"
+            }
+        }
+    </script>
+</body>
+
+</html>

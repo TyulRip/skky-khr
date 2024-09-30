@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SKKY | 상품 목록</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/product.css' %}">
+</head>
+
+<body>
+    <h1>상품 목록</h1>
+    <a href="{% url 'main' %}" class="a-tag">메인</a>
+    <a href="{% url '상품등록' %}" class="a-tag">상품 등록</a>
+    <table>
+        <tr>
+            <th>상품명</th>
+            <th>상품 포인트</th>
+            <th>활용 페트병</th>
+            <th>이미지</th>
+            <th>교환 수</th>
+            <th></th>
+        </tr>
+        {% for pro in products %}
+        <tr id="product-row-{{ pro.id }}">
+            <td class="product-name">{{ pro.product_name }}</td>
+            <td class="product-point">{{ pro.product_point }}</td>
+            <td class="product-pet">{{ pro.product_pet }}</td>
+            <td class="product-image"><img src="{{ pro.image }}" alt="{{ pro.product_name }}" width="100"></td>
+            <td class="product-change">{{ pro.product_change }}</td>
+            <td>
+                <button onclick="editProduct('{{ pro.id }}')" class="product-button">수정</button><br>
+                <a href="{% url '상품삭제' pro.id %}" onclick="confirmDeletion(event, this.href)" >
+                    <button class="product-button">삭제</button>
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <script>
+        // 상품 삭제 시 확인 메시지 표시
+        function confirmDeletion(event, url) {
+            event.preventDefault(); // 기본 링크 동작 방지
+
+            if (confirm("삭제하시겠습니까?")) {
+                // 사용자가 '확인'을 누르면 해당 URL로 이동하여 삭제 진행
+                window.location.href = url;
+            }
+        }
+
+        function editProduct(productId) {
+            const row = document.getElementById('product-row-' + productId);
+            const productName = row.querySelector('.product-name').innerText;
+            const productPoint = row.querySelector('.product-point').innerText;
+            const productPet = row.querySelector('.product-pet').innerText;
+            const productImage = row.querySelector('.product-image img').src;
+
+            // Update the row with input fields
+            row.innerHTML = `
+                <td><input type="text" name="product_name" value="${productName}" required></td>
+                <td><input type="number" name="product_point" value="${productPoint}" required></td>
+                <td><input type="number" name="product_pet" value="${productPet}" required></td>
+                <td><input type="text" name="image" value="${productImage}"></td>
+                <td>${row.querySelector('.product-change').innerText}</td>
+                <td>
+                    <button onclick="saveProduct(${productId})">저장</button>
+                    <button onclick="cancelEdit(${productId})">취소</button>
+                </td>
+            `;
+        }
+
+        function saveProduct(productId) {
+            const row = document.getElementById('product-row-' + productId);
+            const formData = new FormData();
+            formData.append('product_name', row.querySelector('input[name="product_name"]').value);
+            formData.append('product_point', row.querySelector('input[name="product_point"]').value);
+            formData.append('product_pet', row.querySelector('input[name="product_pet"]').value);
+            formData.append('image', row.querySelector('input[name="image"]').value);
+
+            fetch(`/product/edit/${productId}/`, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'  // CSRF 토큰 추가
+                }
+            })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.reload();  // 페이지 새로고침
+                    }
+                });
+        }
+
+        function cancelEdit(productId) {
+            window.location.reload();  // 페이지 새로고침하여 취소
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,37 @@
+table {
+    margin-top: 2vw;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+th {
+    background-color: #55AA55;
+    color: white
+}
+
+.h1 {
+    margin-left: 10px;
+}
+
+.a-tag {
+    margin-left: 10px;
+    text-decoration: none;
+    color: gray;
+}
+
+.product-button {
+    text-decoration: none;
+    color: white;
+    background-color: #55AA55;
+    border-radius: 10px;
+    padding: 0.3vw 0.6vw;
+    border: 0px;
+    margin-bottom: 5px;
+}

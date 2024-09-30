@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SKKY | 로그인</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+</head>
+
+<body>
+    <h1>로그인</h1>
+
+    <!-- 에러 메시지 출력 -->
+    {% if messages %}
+    <ul>
+        {% for message in messages %}
+        <li class="{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <!-- 로그인 폼 -->
+    <form action="{% url 'login' %}" method="post">
+        <br>
+        {% csrf_token %}
+        <input type="text" name="username" id="username" placeholder="아이디" required>
+        <br>
+        <br>
+        <input type="password" name="password" id="password" placeholder="비밀번호" required>
+
+        <button type="submit">로그인</button>
+    </form>
+
+    <p>아직 계정이 없으신가요? <a href="{% url 'signup' %}">회원가입</a></p>
+
+    <div class="chatbot-icon">
+        <a href="#" onclick="openChatbot();">
+            <img src="{% static 'img/chat.png' %}" alt="챗봇 아이콘" class="chatbot-img">
+        </a>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <a href="{% url 'aboutus' %}">ABOUT US</a>
+            <a href="{% url 'main' %}"><img src="{% static 'img/home.png' %}" alt="집 그림"></a>
+            <a href="{% url '마이페이지' %}"><img src="{% static 'img/mypage.png' %}" alt="사람 그림"></a>
+        </div>
+    </footer>
+</body>
+
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        const footerHeight = document.querySelector('footer').offsetHeight;
+        document.body.style.paddingBottom = `${footerHeight}px`;
+    });
+</script>
+
+</html>

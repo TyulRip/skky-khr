@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SKKY | 교환신청내역</title>
+</head>
+
+<body>
+    <a href="{% url '회원정보' %}">뒤로가기</a>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>아이디</th>
+                <th>이름</th>
+                <th>연락처</th>
+                <th>상품명</th>
+                <th>교환 수량</th>
+                <th>교환 신청일</th>
+                <th>배송 완료</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for exchange in exchange_list %}
+            <tr>
+                <td>{{ exchange.user.username }}</td> <!-- 사용자 아이디 -->
+                <td>{{ exchange.user.user_name }}</td> <!-- 사용자 이름 -->
+                <td>{{ exchange.user.user_phone }}</td> <!-- 사용자 연락처 -->
+                <td>{{ exchange.product.product_name }}</td> <!-- 교환한 상품명 -->
+                <td>{{ exchange.change_cnt }}</td> <!-- 교환 수량 -->
+                <td>{{ exchange.change_app_dt }}</td> <!-- 교환 신청일 -->
+                <td>{% if exchange.change_dt %}{{ exchange.change_dt }}{% else %}미완료{% endif %}</td>
+                <td>
+                    <a href="{% url '배송완료' exchange.id %}"><button>배송 완료</button></a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="8">교환 내역이 없습니다.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+
+</html>

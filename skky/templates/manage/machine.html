@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SKKY | 기계 관리</title>
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/machine.css' %}">
+</head>
+
+<body>
+    <h1>기계 목록</h1>
+    <a href="{% url 'main' %}">메인</a>
+
+    <!-- 지도 표시 부분 -->
+    <div id="map">
+        {{ map|safe }} <!-- Folium에서 생성한 지도 삽입 -->
+    </div>
+
+    <!-- 기계 목록 테이블 -->
+    <table id="machine-table">
+        <tr>
+            <th>위치</th>
+            <th>수용 개수</th>
+            <th>페트병 수</th>
+            <th>수거</th>
+            <th></th>
+        </tr>
+        {% for machine in machines %}
+        <tr id="machine-row-{{ machine.id }}">
+            <td class="machine-address">{{ machine.machine_address }}</td>
+            <td class="machine-capacity">{{ machine.machine_capacity }}</td>
+            <td class="machine-pet">{{ machine.machine_pet }}</td>
+            <td>
+                <!-- 수거 버튼 클릭 시 confirmCollection 함수 호출 -->
+                <a href="{% url '기계수거' machine.id %}" onclick="confirmCollection(event, this.href)">
+                    <button>수거완료</button>
+                </a>
+            </td>
+            <td>
+                <button onclick="editMachine('{{ machine.id }}')">수정</button>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <script>
+        // 수거 확인 함수
+        function confirmCollection(event, url) {
+            event.preventDefault(); // 링크 기본 동작 방지
+
+            // 사용자에게 확인 메시지 표시
+            if (confirm("수거 하시겠습니까?")) {
+                // 확인을 누르면 해당 URL로 이동하여 수거 진행
+                window.location.href = url;
+            } else {
+                return false;
+            }
+        }
+
+        // 기계 정보 수정 기능
+        function editMachine(machineId) {
+            const row = document.getElementById('machine-row-' + machineId);
+            const machineAddress = row.querySelector('.machine-address').innerText;
+            const machineCapacity = row.querySelector('.machine-capacity').innerText;
+            const machinePet = row.querySelector('.machine-pet').innerText;
+
+            // 행을 입력 필드로 변경
+            row.innerHTML = `
+                <td><input type="text" name="machine_address" value="${machineAddress}" required></td>
+                <td><input type="number" name="machine_capacity" value="${machineCapacity}" required></td>
+                <td><input type="number" name="machine_pet" value="${machinePet}" required></td>
+                <td><button onclick="saveMachine(${machineId})">저장</button></td>
+                <td><button onclick="cancelEdit()">취소</button></td>
+            `;
+        }
+
+        // 수정된 기계 정보를 저장하는 함수
+        function saveMachine(machineId) {
+            const row = document.getElementById('machine-row-' + machineId);
+            const formData = new FormData();
+            formData.append('machine_address', row.querySelector('input[name="machine_address"]').value);
+            formData.append('machine_capacity', row.querySelector('input[name="machine_capacity"]').value);
+            formData.append('machine_pet', row.querySelector('input[name="machine_pet"]').value);
+
+            fetch(`/machine/edit/${machineId}/`, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'  // CSRF 토큰 추가
+                }
+            })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.reload();  // 수정 후 페이지 새로고침
+                    }
+                });
+        }
+
+        // 취소 시 페이지를 새로고침하여 원래 상태로 복귀
+        function cancelEdit() {
+            window.location.reload();
+        }
+    </script>
+</body>
+
+</html>

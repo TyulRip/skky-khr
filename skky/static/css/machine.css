@@ -1,0 +1,91 @@
+/* 기본 스타일 설정 */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+}
+
+/* 제목 스타일 */
+h1 {
+    text-align: center;
+    margin-top: 20px;
+    color: #2c3e50;
+}
+
+/* 링크 스타일 */
+a {
+    color: gray;
+    text-decoration: none;
+    font-size: 20px;
+    text-align: center; /* 중앙 정렬 */
+    display: block; /* 블록 요소로 만들어서 넓이 차지 */
+    padding: 10px; /* 추가적인 패딩 */
+}
+
+
+/* 메인 링크 스타일 */
+.admin-container, .user-container {
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin: 20px;
+}
+
+/* 버튼 스타일 */
+button {
+    background-color: #55AA55;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #228B22; /* 호버 시 색상 변경 */
+}
+
+/* 테이블 스타일 */
+#machine-table {
+    width: 90%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+#machine-table th, #machine-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+}
+
+#machine-table th {
+    background-color: #2c3e50;
+    color: white;
+}
+
+/* 지도 스타일 */
+#map {
+    width: 60%;
+    height: 60vw;
+    max-height: 400px;
+    margin: 20px auto 20vw;
+}   
+
+#machine-table input[type="text"] {
+    padding: 8px;
+    border: 1px solid #55AA55;
+    border-radius: 10px;
+    min-width: 20px; 
+    width: 350px;
+}
+
+#machine-table input[type="number"] {
+    padding: 8px;
+    border: 1px solid #55AA55;
+    border-radius: 10px;
+    min-width: 20px;
+    width: 50px;
+}

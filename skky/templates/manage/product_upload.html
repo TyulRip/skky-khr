@@ -1,0 +1,32 @@
+<!-- templates/manage/product_register.html -->
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SKKY | 상품 등록</title>
+</head>
+
+<body>
+    <h1>상품 등록</h1>
+    <form method="POST" action="">
+        {% csrf_token %}
+        <label for="product_name">상품명:</label>
+        <input type="text" id="product_name" name="product_name" required><br>
+
+        <label for="product_point">포인트:</label>
+        <input type="number" id="product_point" name="product_point" required><br>
+
+        <label for="product_pet">페트병 개수:</label>
+        <input type="number" id="product_pet" name="product_pet" required><br>
+
+        <label for="image">이미지 URL:</label>
+        <input type="text" id="image" name="image"><br>
+
+        <button type="submit">등록</button>
+    </form>
+    <a href="{% url '상품정보' %}">상품 목록으로 돌아가기</a>
+</body>
+
+</html>
